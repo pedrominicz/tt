@@ -1,7 +1,5 @@
 {
-module Parse
-    ( parse
-    ) where
+module Parse (parse) where
 
 import Lex
 import Syntax
@@ -15,28 +13,28 @@ import Syntax
 %name parseExpr
 
 %token
-    '\\'    { Lambda }
-    '.'     { Dot }
-    '('     { OpenParen }
-    ')'     { CloseParen }
-    var     { Variable $$ }
+  '\\'  { Lambda }
+  '.'   { Dot }
+  '('   { OpenParen }
+  ')'   { CloseParen }
+  var   { Variable $$ }
 %%
 
 Expr
-    : '\\' var '.' Expr { Lam $2 $4 }
-    | Application       { $1 }
+  : '\\' var '.' Expr { Lam $2 $4 }
+  | Application       { $1 }
 
 Application
-    : Application Atom  { App $1 $2 }
-    | Atom              { $1 }
+  : Application Atom  { App $1 $2 }
+  | Atom              { $1 }
 
 Atom
-    : '(' Expr ')'      { $2 }
-    | var               { Var $1 }
+  : '(' Expr ')'      { $2 }
+  | var               { Var $1 }
 
 {
 parse :: String -> Maybe Expr
 parse str = do
-    tokens <- tokenize str
-    parseExpr tokens
+  tokens <- tokenize str
+  parseExpr tokens
 }

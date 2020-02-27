@@ -3,17 +3,15 @@ module Eval where
 import Syntax
 
 eval :: Expr -> Expr
-eval (Lam x body) = Lam x (eval body)
-eval (App x y) =
-    case eval x of
-        Lam x body -> eval $ subst x y body
-        x -> App x (eval y)
+eval (Lam v b) = Lam v (eval b)
+eval (App f a) =
+  case eval f of
+    Lam v b -> eval $ subst v a b
+    f -> App f (eval a)
 eval x = x
 
 subst :: Name -> Expr -> Expr -> Expr
-subst x y (Var x')
-    | x == x' = y
-subst x y (Lam x' body)
-    | x /= x' = Lam x' (subst x y body)
-subst x y (App x' y') = App (subst x y x') (subst x y y')
-subst _ _ x = x
+subst v x (Var v')   | v == v' = x
+subst v x (Lam v' b) | v /= v' = Lam v' (subst v x b)
+subst v x (App f a)            = App (subst v x f) (subst v x a)
+subst _ _ x                    = x
