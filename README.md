@@ -1,3 +1,3 @@
-### Useful Resources
+### Overview
 
-http://dev.stephendiehl.com/fun/008_extended_parser.html
+There is an implementation of untyped lambda calculus in this repository. Variable names are one character long. Only lowercase letters are allowed.
