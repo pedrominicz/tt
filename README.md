@@ -21,6 +21,18 @@ I've been exploring a hopefully simpler approach: induction for lambda-encoded d
 - Self types
   - Self Types for Dependently Typed Lambda Encodings
 
+### Impredicativity and Proof Irrelevance in the Calculus of Constructions
+
+I am not fond of infinite universe hierarchies. I would rather have an impredicative universe. However, [`impredicative polymorphism /\ excluded middle /\ large elimination -> false`][3].
+
+- [Axiom K][4]
+- Calculus of Inductive Constructions
+  - [Coq][5]
+  - [Lean][6]
+- The Implicit Calculus of Constructions as a Programming Language with Dependent Types
+
+Note that `impredicative polymorphism /\ excluded middle -> proof irrelevance`.
+
 ### A Subset of Twelf's Grammar
 
     decl ::= id : term.
@@ -33,7 +45,7 @@ I've been exploring a hopefully simpler approach: induction for lambda-encoded d
 
 ### Twelf's Syntax
 
-The following was taken from the [wiki][3]. I believe `b` and `c` are supposed to be constants. Note that I copied it in verbatim, the lambda syntax would have to be changed to `[x : A] M` for the grammar above to support it.
+The following was taken from the [wiki][7]. I believe `b` and `c` are supposed to be constants. Note that I copied it in verbatim, the lambda syntax would have to be changed to `[x : A] M` for the grammar above to support it.
 
     K ::= type | {x : A} K
     A ::= b | A M | {x : A} A'
@@ -44,4 +56,8 @@ If you haven't noticed, I find Twelf to be very elegant.
 
 [1]: http://okmij.org/ftp/tagless-final/course/Boehm-Berarducci.html
 [2]: https://homepages.inf.ed.ac.uk/wadler/papers/free-rectypes/free-rectypes.txt
-[3]: http://twelf.org/wiki/Proving_metatheorems:Full_LF
+[3]: https://github.com/FStarLang/FStar/issues/360
+[4]: https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29
+[5]: https://coq.inria.fr/distrib/current/refman/language/cic.html
+[6]: https://lean-forward.github.io/logical-verification/2018/41_notes.html
+[7]: http://twelf.org/wiki/Proving_metatheorems:Full_LF
