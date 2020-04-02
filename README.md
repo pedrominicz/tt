@@ -23,15 +23,20 @@ I've been exploring a hopefully simpler approach: induction for lambda-encoded d
 
 ### Impredicativity and Proof Irrelevance in the Calculus of Constructions
 
-I am not fond of infinite universe hierarchies. I would rather have an impredicative universe. However, [`impredicative polymorphism /\ excluded middle /\ large elimination -> false`][3].
+I am not fond of infinite universe hierarchies. I rather have an impredicative universe. However, [`impredicative polymorphism /\ excluded middle /\ large elimination -> false`][3].
 
-- [Axiom K][4]
+- [Axiom K][4] (a.k.a. uniqueness of identity proofs)
 - Calculus of Inductive Constructions
   - [Coq][5]
   - [Lean][6]
 - The Implicit Calculus of Constructions as a Programming Language with Dependent Types
 
 Note that `impredicative polymorphism /\ excluded middle -> proof irrelevance`.
+
+- Irrelevance on the [Agda wiki][7] (the irrelevance axiom is of special interest)
+- On the strength of proof-irrelevant type theories
+- Propositions as [Types]
+- Erasure and Polymorphism in Pure Type Systems
 
 ### A Subset of Twelf's Grammar
 
@@ -45,7 +50,7 @@ Note that `impredicative polymorphism /\ excluded middle -> proof irrelevance`.
 
 ### Twelf's Syntax
 
-The following was taken from the [wiki][7]. I believe `b` and `c` are supposed to be constants. Note that I copied it in verbatim, the lambda syntax would have to be changed to `[x : A] M` for the grammar above to support it.
+The following was taken from the [wiki][8]. I believe `b` and `c` are constants. Note that I copied it in verbatim, the lambda syntax would have to be changed to `[x : A] M` for the grammar above to support it.
 
     K ::= type | {x : A} K
     A ::= b | A M | {x : A} A'
@@ -60,4 +65,5 @@ If you haven't noticed, I find Twelf to be very elegant.
 [4]: https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29
 [5]: https://coq.inria.fr/distrib/current/refman/language/cic.html
 [6]: https://lean-forward.github.io/logical-verification/2018/41_notes.html
-[7]: http://twelf.org/wiki/Proving_metatheorems:Full_LF
+[7]: https://agda.readthedocs.io/en/latest/language/irrelevance.html
+[8]: http://twelf.org/wiki/Proving_metatheorems:Full_LF
