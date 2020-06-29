@@ -2,5 +2,5 @@
 
 alex Lex.x
 happy Parse.y
-ghci -Wall Main.hs
+runhaskell Test.hs && ghci -Wall Main.hs
 rm Lex.hs Parse.hs

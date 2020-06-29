@@ -6,6 +6,7 @@ data Expr
   = Var Name
   | Lam Name Expr
   | App Expr Expr
+  deriving (Eq)
 
 instance Show Expr where
   show = go

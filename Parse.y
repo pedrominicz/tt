@@ -21,8 +21,12 @@ import Syntax
 %%
 
 Expr
-  : '\\' var '.' Expr { Lam $2 $4 }
+  : '\\' var Lambda   { Lam $2 $3 }
   | Application       { $1 }
+
+Lambda
+  : var Lambda        { Lam $1 $2 }
+  | '.' Expr          { $2 }
 
 Application
   : Application Atom  { App $1 $2 }
