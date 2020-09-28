@@ -12,6 +12,7 @@ $eol = [\n]
 tokens :-
   $eol    ;
   $white+ ;
+  "--".*  ;
   \\      { \s -> Lambda }
   \.      { \s -> Dot }
   \(      { \s -> OpenParen }
@@ -35,7 +36,7 @@ tokenize str = go ('\n', [], str)
       AlexEOF            -> Just []
       AlexError _        -> Nothing
       AlexSkip input len -> go input
-      AlexToken input len act -> do
+      AlexToken input len action -> do
         rest <- go input
-        return (act (take len str) : rest)
+        return (action (take len str) : rest)
 }
