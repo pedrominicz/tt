@@ -7,7 +7,7 @@ import Syntax
 
 %tokentype { Token }
 
-%monad { Maybe } { (>>=) } { return }
+%monad { Maybe }
 %error { const Nothing }
 
 %name parseExpr
@@ -20,20 +20,20 @@ import Syntax
   var   { Variable $$ }
 %%
 
-Expr
-  : '\\' var Lambda   { Lam $2 $3 }
-  | Application       { $1 }
+expr
+  : '\\' var lambda   { Lam $2 $3 }
+  | application       { $1 }
 
-Lambda
-  : var Lambda        { Lam $1 $2 }
-  | '.' Expr          { $2 }
+lambda
+  : var lambda        { Lam $1 $2 }
+  | '.' expr          { $2 }
 
-Application
-  : Application Atom  { App $1 $2 }
-  | Atom              { $1 }
+application
+  : application atom  { App $1 $2 }
+  | atom              { $1 }
 
-Atom
-  : '(' Expr ')'      { $2 }
+atom
+  : '(' expr ')'      { $2 }
   | var               { Var $1 }
 
 {
