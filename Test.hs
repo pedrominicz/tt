@@ -21,10 +21,10 @@ test1 :: Bool
 test1 = parse "\\xyz.xz(yz)" == Just s
 
 test2 :: Bool
-test2 = (eval <$> parse "(\\x.x)a") == Just (Var "a")
+test2 = parse "(\\x.x)(\\y.y)" == Just (App (Lam "x" (Var "x")) (Lam "y" (Var "y")))
 
 test3 :: Bool
-test3 = (eval <$> parse "(\\xyz.xz(yz))(\\xy.x)(\\xy.x)") == Just (Lam "z" (Var "z"))
+test3 = eval (App (App s k) k) == Lam "z" (Var "z")
 
 tests :: [Bool]
 tests =
