@@ -2,16 +2,30 @@ module Eval where
 
 import Expr
 
+shift :: Int -> Expr -> Expr
+shift n = go 0
+  where
+  go i (App f a) = App (go i f) (go i a)
+  go i (Bound i') | i <= i' = Bound (i' + n)
+  go i (Lam b) = Lam (go (i + 1) b)
+  go i x = x
+
+subst :: Expr -> Expr -> Expr
+subst x = go 0
+  where
+  go i (App f a) = App (go i f) (go i a)
+  go i (Bound i') =
+    case compare i i' of
+      LT -> Bound (i' - 1)
+      EQ -> shift i x
+      GT -> Bound i'
+  go i (Lam b) = Lam (go (i + 1) b)
+  go i x = x
+
 eval :: Expr -> Expr
 eval (Lam b) = Lam (eval b)
 eval (App f a) =
   case eval f of
-    Lam b -> eval $ subst 0 a b
+    Lam b -> eval $ subst a b
     f -> App f (eval a)
 eval x = x
-
-subst :: Int -> Expr -> Expr -> Expr
-subst i x (App f a) = App (subst i x f) (subst i x a)
-subst i x (Bound i') | i == i' = x
-subst i x (Lam b) = Lam (subst (i + 1) x b)
-subst _ _ x = x
