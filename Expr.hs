@@ -1,4 +1,4 @@
-module Syntax where
+module Expr where
 
 import Data.List
 
