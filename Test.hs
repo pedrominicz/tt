@@ -1,38 +1,20 @@
 module Test where
 
-import Eval
-import Parse
 import Syntax
 
 import Data.Functor
 import Data.List
 import System.Exit
 
-s :: Expr
-s = Lam "x" (Lam "y" (Lam "z" (App (App (Var "x") (Var "z")) (App (Var "y") (Var "z")))))
-
-k :: Expr
-k = Lam "x" (Lam "y" (Var "x"))
-
-test0 :: Bool
-test0 = parse "\\x.\\y.x" == Just k
-
-test1 :: Bool
-test1 = parse "\\xyz.xz(yz)" == Just s
-
-test2 :: Bool
-test2 = parse "(\\x.x)(\\y.y)" == Just (App (Lam "x" (Var "x")) (Lam "y" (Var "y")))
-
-test3 :: Bool
-test3 = eval (App (App s k) k) == Lam "z" (Var "z")
+test0, test1, test2, test3, test4 :: Bool
+test0 = "\\a.a" == show (Lam (Bound 0))
+test1 = "\\a.\\b.a" == show (Lam (Lam (Bound 1)))
+test2 = "\\b.\\c.ab" == show (Lam (Lam (App (Free "a") (Bound 1))))
+test3 = "\\a.\\b.\\c.ac(bc)" == show (Lam (Lam (Lam (App (App (Bound 2) (Bound 0)) (App (Bound 1) (Bound 0))))))
+test4 = "\\b.\\d.\\e.cbe(d(ae))" == show (Lam (Lam (Lam (App (App (App (Free "c") (Bound 2)) (Bound 0)) (App (Bound 1) (App (Free "a") (Bound 0)))))))
 
 tests :: [Bool]
-tests =
-  [ test0
-  , test1
-  , test2
-  , test3
-  ]
+tests = [test0, test1, test2, test3, test4]
 
 errors :: [String]
 errors = elemIndices False tests <&> \i ->
