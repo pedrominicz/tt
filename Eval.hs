@@ -2,13 +2,13 @@ module Eval where
 
 import Expr
 
-shift :: Int -> Expr -> Expr
-shift n = go 0
-  where
-  go i (App f a) = App (go i f) (go i a)
-  go i (Bound i') | i <= i' = Bound (i' + n)
-  go i (Lam b) = Lam (go (i + 1) b)
-  go i x = x
+eval :: Expr -> Expr
+eval (Lam b) = Lam (eval b)
+eval (App f a) =
+  case eval f of
+    Lam b -> eval $ subst a b
+    f -> App f (eval a)
+eval x = x
 
 subst :: Expr -> Expr -> Expr
 subst x = go 0
@@ -22,10 +22,10 @@ subst x = go 0
   go i (Lam b) = Lam (go (i + 1) b)
   go i x = x
 
-eval :: Expr -> Expr
-eval (Lam b) = Lam (eval b)
-eval (App f a) =
-  case eval f of
-    Lam b -> eval $ subst a b
-    f -> App f (eval a)
-eval x = x
+shift :: Int -> Expr -> Expr
+shift n = go 0
+  where
+  go i (App f a) = App (go i f) (go i a)
+  go i (Bound i') | i <= i' = Bound (i' + n)
+  go i (Lam b) = Lam (go (i + 1) b)
+  go i x = x
