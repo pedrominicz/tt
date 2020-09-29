@@ -1,6 +1,3 @@
 #!/bin/sh
 
-alex Lex.x
-happy Parse.y
 runhaskell Test.hs && ghci -Wall Main.hs
-rm Lex.hs Parse.hs
