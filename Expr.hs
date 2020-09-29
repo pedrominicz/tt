@@ -2,7 +2,7 @@ module Expr where
 
 import Data.List
 
-type Name = String
+type Name = Char
 
 data Expr
   = App Expr Expr
@@ -21,13 +21,13 @@ instance Show Expr where
   show expr = go 0 expr
     where
     go n (App f a) = go n f ++ parens n a
-    go n (Bound x) = names !! (n - x - 1)
-    go n (Free x)  = x
-    go n (Lam b)   = "\\" ++ names !! n ++ "." ++ go (n + 1) b
+    go n (Bound x) = [names !! (n - x - 1)]
+    go n (Free x)  = [x]
+    go n (Lam b)   = "\\" ++ [names !! n] ++ "." ++ go (n + 1) b
 
     parens n (Bound x) = go n (Bound x)
     parens n (Free x)  = go n (Free x)
     parens n x         = "(" ++ go n x ++ ")"
 
     -- This explodes if indexed beyond 25 or less.
-    names = map return ['a'..'z'] \\ free expr
+    names = ['a'..'z'] \\ free expr
