@@ -9,7 +9,6 @@ data Expr
   | Bound Int
   | Free Name
   | Lam Expr
-  deriving (Eq)
 
 free :: Expr -> [Name]
 free (App f a) = free f ++ free a
