@@ -11,7 +11,7 @@ type Parser = ParsecT String () (Reader [Name])
 parse :: String -> Maybe Expr
 parse s =
   case runReader (runParserT (whitespace *> expression <* eof) () "" s) [] of
-    Left e  -> error $ show e
+    Left e -> error $ show e
     Right e -> Just e
 
 expression :: Parser Expr
@@ -33,7 +33,7 @@ variable = do
   env <- ask
   x <- name
   case elemIndex x env of
-    Just i  -> return $ Bound i
+    Just i -> return $ Bound i
     Nothing -> return $ Free x
 
 name :: Parser Name
