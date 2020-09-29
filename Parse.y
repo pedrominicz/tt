@@ -3,12 +3,15 @@ module Parse (parse) where
 
 import Lex
 import Syntax
+
+import Control.Applicative
+import Control.Monad.Reader
 }
 
 %tokentype { Token }
 
-%monad { Maybe }
-%error { const Nothing }
+%monad { ReaderT [Name] Maybe }
+%error { const empty }
 
 %name parseExpr
 
@@ -21,11 +24,11 @@ import Syntax
 %%
 
 expr
-  : '\\' var lambda   { Lam $2 $3 }
+  : '\\' var lambda   { Lam $3 }
   | application       { $1 }
 
 lambda
-  : var lambda        { Lam $1 $2 }
+  : var lambda        { Lam $2 }
   | '.' expr          { $2 }
 
 application
@@ -34,11 +37,11 @@ application
 
 atom
   : '(' expr ')'      { $2 }
-  | var               { Var $1 }
+  | var               { Free $1 }
 
 {
 parse :: String -> Maybe Expr
-parse str = do
-  tokens <- tokenize str
+parse str = flip runReaderT [] $ do
+  tokens <- lift $ tokenize str
   parseExpr tokens
 }
