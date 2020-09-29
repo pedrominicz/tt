@@ -46,4 +46,6 @@ parens p = between open close p
   close = char ')' <* whitespace
 
 whitespace :: Parser ()
-whitespace = skipMany space
+whitespace = do
+  skipMany space
+  optional $ string "--" *> skipMany anyToken
