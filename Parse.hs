@@ -33,7 +33,7 @@ variable = do
   env <- ask
   x <- name
   case elemIndex x env of
-    Just x  -> return $ Bound x
+    Just i  -> return $ Bound i
     Nothing -> return $ Free x
 
 name :: Parser Name
