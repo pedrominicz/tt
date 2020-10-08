@@ -47,5 +47,5 @@ parens p = between open close p
 
 whitespace :: Parser ()
 whitespace = do
-  skipMany space
-  optional $ string "--" *> skipMany anyToken
+  spaces
+  optional $ string "--" *> skipMany anyChar
