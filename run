@@ -1,3 +1,5 @@
 #!/bin/sh
 
-runhaskell Test.hs && ghci -Wall Main.hs
+runhaskell Test.hs || exit
+runhaskell Main.hs <input.txt 2>/dev/null |cmp output.txt || exit
+ghci -Wall Main.hs

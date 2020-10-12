@@ -1,0 +1,65 @@
+-- `i` combinator
+\x.x
+-- `k` combinator
+\xy.x
+-- `s` combinator
+\xyz.xz(yz)
+-- `skk`
+(\xyz.xz(yz))(\xy.x)(\xy.x)
+-- `s(k(s(k(s(k(ss(sk)))))(s(s(ks)k))))k`
+-- https://pedrominicz.github.io/arrow
+(\xyz.xz(yz))((\xy.x)((\xyz.xz(yz))((\xy.x)((\xyz.xz(yz))((\xy.x)((\xyz.xz(yz))(\xyz.xz(yz))((\xyz.xz(yz))(\xy.x))))))((\xyz.xz(yz))((\xyz.xz(yz))((\xy.x)(\xyz.xz(yz)))(\xy.x)))))(\xy.x)
+-- `true`
+\tf.t
+-- `false`
+\tf.f
+-- zero
+\sz.z
+-- one
+\sz.sz
+-- two
+\sz.s(sz)
+-- `succ`
+\n.\sz.ns(sz)
+(\n.\sz.ns(sz))(\sz.z)
+(\n.\sz.ns(sz))(\sz.sz)
+(\n.\sz.ns(sz))(\sz.s(sz))
+-- `is_zero`
+\n.n((\xy.x)(\tf.f))(\tf.t)
+(\n.n((\xy.x)(\tf.f))(\tf.t))(\sz.z)
+(\n.n((\xy.x)(\tf.f))(\tf.t))(\sz.sz)
+(\n.n((\xy.x)(\tf.f))(\tf.t))(\sz.s(sz))
+(\n.n((\xy.x)(\tf.f))(\tf.t))(\sz.s(s(s(s(s(sz))))))
+-- `pred`
+\n.\sz.n(\fg.g(fs))(\f.z)(\x.x)
+(\n.\sz.n(\fg.g(fs))(\f.z)(\x.x))(\sz.z)
+(\n.\sz.n(\fg.g(fs))(\f.z)(\x.x))(\sz.sz)
+(\n.\sz.n(\fg.g(fs))(\f.z)(\x.x))(\sz.s(sz))
+(\n.\sz.n(\fg.g(fs))(\f.z)(\x.x))(\sz.s(s(s(s(s(sz))))))
+-- `add`
+\nm.\sz.ns(msz)
+(\nm.\sz.ns(msz))(\sz.z)(\sz.z)
+(\nm.\sz.ns(msz))(\sz.sz)(\sz.sz)
+(\nm.\sz.ns(msz))(\sz.s(sz))(\sz.z)
+(\nm.\sz.ns(msz))(\sz.s(s(sz)))(\sz.s(s(sz)))
+-- `mul`
+\nm.\sz.n(ms)z
+(\nm.\sz.n(ms)z)(\sz.sz)(\sz.sz)
+(\nm.\sz.n(ms)z)(\sz.s(sz))(\sz.s(sz))
+(\nm.\sz.n(ms)z)(\sz.s(sz))(\sz.s(s(sz)))
+(\nm.\sz.n(ms)z)(\sz.s(s(s(sz))))(\sz.z)
+(\nm.\sz.n(ms)z)(\sz.z)(\sz.z)
+-- `exp`
+\nm.mn
+(\nm.mn)(\sz.z)(\sz.z)
+(\nm.mn)(\sz.sz)(\sz.s(s(s(sz))))
+(\nm.mn)(\sz.z)(\sz.s(s(s(sz))))
+(\nm.mn)(\sz.s(s(s(sz))))(\sz.z)
+(\nm.mn)(\sz.s(sz))(\sz.s(s(s(sz))))
+-- factorial
+-- http://www.flownet.com/ron/lambda-calculus.html
+\nf.n(\ci.(i(c(\fx.if(fx)))))(\x.f)(\x.x)
+(\nf.n(\ci.(i(c(\fx.if(fx)))))(\x.f)(\x.x))(\sz.z)
+(\nf.n(\ci.(i(c(\fx.if(fx)))))(\x.f)(\x.x))(\sz.s(sz))
+(\nf.n(\ci.(i(c(\fx.if(fx)))))(\x.f)(\x.x))(\sz.s(s(sz)))
+(\nf.n(\ci.(i(c(\fx.if(fx)))))(\x.f)(\x.x))(\sz.s(s(s(sz))))
