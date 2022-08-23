@@ -13,10 +13,12 @@ $digit = [0-9]
 
 @skip = $nl* [\ \t\v]+
 @name = [$alpha] [$alpha $digit _]*
+@num = $digit+
 
 tokens :-
   @skip         ;
   @name         { Name }
+  @num          { Num . read }
   "\" | "λ"     { const Lam }
   ","           { const Comma }
   "("           { const LParen }
@@ -28,6 +30,7 @@ tokens :-
 {
 data Token
   = Name E.Name
+  | Num Int
   | Lam
   | Comma
   | LParen
@@ -37,6 +40,7 @@ data Token
 
 pretty :: Token -> String
 pretty (Name x) = x
+pretty (Num x) = show x
 pretty Lam = "λ"
 pretty Comma = ","
 pretty LParen = "("

@@ -1,65 +1,69 @@
 -- `i` combinator
-λ x, x
+i = λ x, x
 -- `k` combinator
-λ x y, x
+k = λ x y, x
 -- `s` combinator
-λ x y z, x z (y z)
+s = λ x y z, x z (y z)
 -- `s k k`
 (λ x y z, x z (y z)) (λ x y, x) (λ x y, x)
--- `s (k (s (k (s (k (s s (s k))))) (s (s (k s) k)))) k`
 -- https://pedrominicz.github.io/arrow
 (λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) (λ x y z, x z (y z)) ((λ x y z, x z (y z)) (λ x y, x)))))) ((λ x y z, x z (y z)) ((λ x y z, x z (y z)) ((λ x y, x) (λ x y z, x z (y z))) (λ x y, x))))) (λ x y, x)
+s (k (s (k (s (k (s s (s k))))) (s (s (k s) k)))) k
 -- `true`
-λ t f, t
+true = λ t f, t
 -- `false`
-λ t f, f
+false = λ t f, f
 -- zero
 λ s z, z
+0
 -- one
 λ s z, s z
+1
 -- two
 λ s z, s (s z)
+2
 -- `succ`
-λ n, λ s z, n s (s z)
-(λ n, λ s z, n s (s z)) (λ s z, z)
-(λ n, λ s z, n s (s z)) (λ s z, s z)
-(λ n, λ s z, n s (s z)) (λ s z, s (s z))
+succ = λ n, λ s z, n s (s z)
+succ 0
+succ 1
+succ 2
+succ 10
 -- `is_zero`
-λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)
-(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, z)
-(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s z)
-(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s (s z))
-(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s (s (s (s (s (s z))))))
+is_zero = λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)
+is_zero 0
+is_zero 1
+is_zero 2
+is_zero 10
 -- `pred`
-λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)
-(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, z)
-(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s z)
-(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s (s z))
-(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s (s (s (s (s (s z))))))
+pred = λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)
+pred 0
+pred 1
+pred 2
+pred 10
 -- `add`
-λ n m, λ s z, n s (m s z)
-(λ n m, λ s z, n s (m s z)) (λ s z, z) (λ s z, z)
-(λ n m, λ s z, n s (m s z)) (λ s z, s z) (λ s z, s z)
-(λ n m, λ s z, n s (m s z)) (λ s z, s (s z)) (λ s z, z)
-(λ n m, λ s z, n s (m s z)) (λ s z, s (s (s z))) (λ s z, s (s (s z)))
+add = λ n m, λ s z, n s (m s z)
+add 0 0
+add 1 1
+add 2 0
+add 5 5
 -- `mul`
-λ n m, λ s z, n (m s) z
-(λ n m, λ s z, n (m s) z) (λ s z, s z) (λ s z, s z)
-(λ n m, λ s z, n (m s) z) (λ s z, s (s z)) (λ s z, s (s z))
-(λ n m, λ s z, n (m s) z) (λ s z, s (s z)) (λ s z, s (s (s z)))
-(λ n m, λ s z, n (m s) z) (λ s z, s (s (s (s z)))) (λ s z, z)
-(λ n m, λ s z, n (m s) z) (λ s z, z) (λ s z, z)
--- `exp`
-λ n m, m n
-(λ n m, m n) (λ s z, z) (λ s z, z)
-(λ n m, m n) (λ s z, s z) (λ s z, s (s (s (s z))))
-(λ n m, m n) (λ s z, z) (λ s z, s (s (s (s z))))
-(λ n m, m n) (λ s z, s (s (s (s z)))) (λ s z, z)
-(λ n m, m n) (λ s z, s (s z)) (λ s z, s (s (s (s z))))
+mul = λ n m, λ s z, n (m s) z
+mul 0 0
+mul 1 1
+mul 2 2
+mul 3 3
+mul 10 0
+-- `pow`
+pow = λ n m, m n
+pow 1 1
+pow 2 2
+pow 3 3
+pow 10 3
 -- factorial
 -- https://www.flownet.com/ron/lambda-calculus.html
-λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)
-(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, z)
-(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s z))
-(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s (s z)))
-(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s (s (s z))))
+fac = λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)
+fac 2
+fac 3
+fac 4
+fac 5
+fac 6

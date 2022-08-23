@@ -1,6 +1,7 @@
 module Expr (Name, Expr(..), Command(..), pretty) where
 
 import Data.List
+import Data.Maybe
 
 type Name = String
 
@@ -19,8 +20,17 @@ free (Lam b) = free b
 free (App f a) = free f ++ free a
 
 pretty :: Expr -> String
-pretty e = expr 0 e
+pretty e = fromMaybe (expr 0 e) (numeral e)
   where
+  numeral :: Expr -> Maybe String
+  numeral (Lam (Lam e)) = show <$> go e
+    where
+    go :: Expr -> Maybe Int
+    go (Var 0) = Just 0
+    go (App (Var 1) e) = succ <$> go e
+    go _ = Nothing
+  numeral _ = Nothing
+
   expr :: Int -> Expr -> String
   expr k (Lam b) = "λ " ++ names !! k ++ ", " ++ expr (k + 1) b
   expr k e = application k e
