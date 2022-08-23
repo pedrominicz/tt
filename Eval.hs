@@ -1,6 +1,7 @@
 module Eval (eval) where
 
 import Expr
+import Monad
 
 shift :: Int -> Expr -> Expr
 shift s = go 0
@@ -27,11 +28,16 @@ subst s = go 0
   go k (Lam b) = Lam (go (k + 1) b)
   go k (App f a) = App (go k f) (go k a)
 
-eval :: Expr -> Expr
-eval (Var x) = Var x
-eval (Const x) = Const x
-eval (Lam b) = Lam (eval b)
-eval (App f a) =
-  case eval f of
+eval :: Expr -> M Expr
+eval (Var x) = return (Var x)
+eval (Const x) = do
+  e <- valueOf x
+  case e of
+    Just e -> eval e
+    Nothing -> return (Const x)
+eval (Lam b) = Lam <$> eval b
+eval (App f a) = do
+  f <- eval f
+  case f of
     Lam b -> eval (subst a b)
-    f -> App f (eval a)
+    f -> App f <$> eval a

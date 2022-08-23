@@ -1,65 +1,65 @@
 -- `i` combinator
-λx.x
+λ x, x
 -- `k` combinator
-λxy.x
+λ x y, x
 -- `s` combinator
-λxyz.xz(yz)
--- `skk`
-(λxyz.xz(yz))(λxy.x)(λxy.x)
--- `s(k(s(k(s(k(ss(sk)))))(s(s(ks)k))))k`
+λ x y z, x z (y z)
+-- `s k k`
+(λ x y z, x z (y z)) (λ x y, x) (λ x y, x)
+-- `s (k (s (k (s (k (s s (s k))))) (s (s (k s) k)))) k`
 -- https://pedrominicz.github.io/arrow
-(λxyz.xz(yz))((λxy.x)((λxyz.xz(yz))((λxy.x)((λxyz.xz(yz))((λxy.x)((λxyz.xz(yz))(λxyz.xz(yz))((λxyz.xz(yz))(λxy.x))))))((λxyz.xz(yz))((λxyz.xz(yz))((λxy.x)(λxyz.xz(yz)))(λxy.x)))))(λxy.x)
+(λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) ((λ x y, x) ((λ x y z, x z (y z)) (λ x y z, x z (y z)) ((λ x y z, x z (y z)) (λ x y, x)))))) ((λ x y z, x z (y z)) ((λ x y z, x z (y z)) ((λ x y, x) (λ x y z, x z (y z))) (λ x y, x))))) (λ x y, x)
 -- `true`
-λtf.t
+λ t f, t
 -- `false`
-λtf.f
+λ t f, f
 -- zero
-λsz.z
+λ s z, z
 -- one
-λsz.sz
+λ s z, s z
 -- two
-λsz.s(sz)
+λ s z, s (s z)
 -- `succ`
-λn.λsz.ns(sz)
-(λn.λsz.ns(sz))(λsz.z)
-(λn.λsz.ns(sz))(λsz.sz)
-(λn.λsz.ns(sz))(λsz.s(sz))
+λ n, λ s z, n s (s z)
+(λ n, λ s z, n s (s z)) (λ s z, z)
+(λ n, λ s z, n s (s z)) (λ s z, s z)
+(λ n, λ s z, n s (s z)) (λ s z, s (s z))
 -- `is_zero`
-λn.n((λxy.x)(λtf.f))(λtf.t)
-(λn.n((λxy.x)(λtf.f))(λtf.t))(λsz.z)
-(λn.n((λxy.x)(λtf.f))(λtf.t))(λsz.sz)
-(λn.n((λxy.x)(λtf.f))(λtf.t))(λsz.s(sz))
-(λn.n((λxy.x)(λtf.f))(λtf.t))(λsz.s(s(s(s(s(sz))))))
+λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)
+(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, z)
+(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s z)
+(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s (s z))
+(λ n, n ((λ x y, x) (λ t f, f)) (λ t f, t)) (λ s z, s (s (s (s (s (s z))))))
 -- `pred`
-λn.λsz.n(λfg.g(fs))(λf.z)(λx.x)
-(λn.λsz.n(λfg.g(fs))(λf.z)(λx.x))(λsz.z)
-(λn.λsz.n(λfg.g(fs))(λf.z)(λx.x))(λsz.sz)
-(λn.λsz.n(λfg.g(fs))(λf.z)(λx.x))(λsz.s(sz))
-(λn.λsz.n(λfg.g(fs))(λf.z)(λx.x))(λsz.s(s(s(s(s(sz))))))
+λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)
+(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, z)
+(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s z)
+(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s (s z))
+(λ n, λ s z, n (λ f g, g (f s)) (λ f, z) (λ x, x)) (λ s z, s (s (s (s (s (s z))))))
 -- `add`
-λnm.λsz.ns(msz)
-(λnm.λsz.ns(msz))(λsz.z)(λsz.z)
-(λnm.λsz.ns(msz))(λsz.sz)(λsz.sz)
-(λnm.λsz.ns(msz))(λsz.s(sz))(λsz.z)
-(λnm.λsz.ns(msz))(λsz.s(s(sz)))(λsz.s(s(sz)))
+λ n m, λ s z, n s (m s z)
+(λ n m, λ s z, n s (m s z)) (λ s z, z) (λ s z, z)
+(λ n m, λ s z, n s (m s z)) (λ s z, s z) (λ s z, s z)
+(λ n m, λ s z, n s (m s z)) (λ s z, s (s z)) (λ s z, z)
+(λ n m, λ s z, n s (m s z)) (λ s z, s (s (s z))) (λ s z, s (s (s z)))
 -- `mul`
-λnm.λsz.n(ms)z
-(λnm.λsz.n(ms)z)(λsz.sz)(λsz.sz)
-(λnm.λsz.n(ms)z)(λsz.s(sz))(λsz.s(sz))
-(λnm.λsz.n(ms)z)(λsz.s(sz))(λsz.s(s(sz)))
-(λnm.λsz.n(ms)z)(λsz.s(s(s(sz))))(λsz.z)
-(λnm.λsz.n(ms)z)(λsz.z)(λsz.z)
+λ n m, λ s z, n (m s) z
+(λ n m, λ s z, n (m s) z) (λ s z, s z) (λ s z, s z)
+(λ n m, λ s z, n (m s) z) (λ s z, s (s z)) (λ s z, s (s z))
+(λ n m, λ s z, n (m s) z) (λ s z, s (s z)) (λ s z, s (s (s z)))
+(λ n m, λ s z, n (m s) z) (λ s z, s (s (s (s z)))) (λ s z, z)
+(λ n m, λ s z, n (m s) z) (λ s z, z) (λ s z, z)
 -- `exp`
-λnm.mn
-(λnm.mn)(λsz.z)(λsz.z)
-(λnm.mn)(λsz.sz)(λsz.s(s(s(sz))))
-(λnm.mn)(λsz.z)(λsz.s(s(s(sz))))
-(λnm.mn)(λsz.s(s(s(sz))))(λsz.z)
-(λnm.mn)(λsz.s(sz))(λsz.s(s(s(sz))))
+λ n m, m n
+(λ n m, m n) (λ s z, z) (λ s z, z)
+(λ n m, m n) (λ s z, s z) (λ s z, s (s (s (s z))))
+(λ n m, m n) (λ s z, z) (λ s z, s (s (s (s z))))
+(λ n m, m n) (λ s z, s (s (s (s z)))) (λ s z, z)
+(λ n m, m n) (λ s z, s (s z)) (λ s z, s (s (s (s z))))
 -- factorial
--- http://www.flownet.com/ron/lambda-calculus.html
-λnf.n(λci.(i(c(λfx.if(fx)))))(λx.f)(λx.x)
-(λnf.n(λci.(i(c(λfx.if(fx)))))(λx.f)(λx.x))(λsz.z)
-(λnf.n(λci.(i(c(λfx.if(fx)))))(λx.f)(λx.x))(λsz.s(sz))
-(λnf.n(λci.(i(c(λfx.if(fx)))))(λx.f)(λx.x))(λsz.s(s(sz)))
-(λnf.n(λci.(i(c(λfx.if(fx)))))(λx.f)(λx.x))(λsz.s(s(s(sz))))
+-- https://www.flownet.com/ron/lambda-calculus.html
+λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)
+(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, z)
+(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s z))
+(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s (s z)))
+(λ n f, n (λ c i, (i (c (λ f x, i f (f x))))) (λ x, f) (λ x, x)) (λ s z, s (s (s (s z))))

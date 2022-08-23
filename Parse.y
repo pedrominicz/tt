@@ -1,10 +1,10 @@
 {
-module Parse (parse) where
+module Parse (parse, parseFile) where
 
+import Monad
 import qualified Expr as E
 import qualified Lex as L
 
-import Control.Monad.Except
 import Data.List
 }
 
@@ -12,25 +12,35 @@ import Data.List
 
 %tokentype { L.Token }
 
-%monad { Except String }
+%monad { M }
 %error { parseError }
 
-%name parseLine line
+%name line line
+%name file file
 
 %token
   name          { L.Name $$ }
   'λ'           { L.Lam }
-  '.'           { L.Dot }
+  ','           { L.Comma }
   '('           { L.LParen }
   ')'           { L.RParen }
+  '='           { L.Equal }
+  '\n'          { L.Newline }
 %%
 
-line :: { Maybe Expr }
-  : expr                        { Just $1 }
+line :: { Maybe E.Command }
+  : name '=' expr               { Just (E.Def $1 (nameless $3)) }
+  | expr                        { Just (E.Eval (nameless $1)) }
   | {- empty -}                 { Nothing }
 
+file :: { [E.Command] }
+  : name '=' expr '\n' file     { E.Def $1 (nameless $3) : $5 }
+  | {- empty -}                 { [] }
+
+-- Expressions
+
 expr :: { Expr }
-  : 'λ' names1 '.' expr         { foldr Lam $4 $2 }
+  : 'λ' names1 ',' expr         { foldr Lam $4 $2 }
   | application                 { $1 }
 
 application :: { Expr }
@@ -62,10 +72,13 @@ nameless = go []
   go ctx (Lam x b) = E.Lam (go (x : ctx) b)
   go ctx (App f a) = E.App (go ctx f) (go ctx a)
 
-parseError :: [L.Token] -> Except String a
-parseError [] = throwError "unexpected end of file"
-parseError (tk : _) = throwError ("unexpected '" ++ L.pretty tk ++ "'")
+parseError :: [L.Token] -> M a
+parseError [] = failure "unexpected end of file"
+parseError (tk : _) = failure $ "unexpected '" ++ L.pretty tk ++ "'"
 
-parse :: String -> Except String (Maybe E.Expr)
-parse str = fmap fmap fmap nameless (L.tokenize str >>= parseLine)
+parse :: String -> M (Maybe E.Command)
+parse str = L.tokenize str >>= line
+
+parseFile :: String -> M [E.Command]
+parseFile str = L.tokenize str >>= file
 }

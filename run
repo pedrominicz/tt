@@ -11,14 +11,18 @@ clean() {
 alex Lex.x
 happy Parse.y
 
-ghc Main.hs -o tt
-ghc -main-is Test.main Test.hs -o test
+ghc -Wall -Werror -Wno-name-shadowing Main.hs -o tt
 
-./test
-./tt <input.txt |cmp output.txt
+test() {
+  ghc -Wall -Werror -Wno-name-shadowing -main-is Test.main Test.hs -o test
+
+  ./test
+  ./tt <input.txt |cmp output.txt
+}
 
 case "$1" in
   Main.hs) rlwrap ./tt;;
   *.hs)    ghci "$1";;
+  test)    test;;
   *)       rlwrap ./tt;;
 esac

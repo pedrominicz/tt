@@ -1,46 +1,56 @@
 {
 module Lex (Token(..), pretty, tokenize) where
 
+import Monad
 import qualified Expr as E
-
-import Control.Monad.Except
 }
 
 %wrapper "basic"
 
-@name = [a-z]
+$nl = [\n\r\f]
+$alpha = [A-Za-z]
+$digit = [0-9]
+
+@skip = $nl* [\ \t\v]+
+@name = [$alpha] [$alpha $digit _]*
 
 tokens :-
-  $white+       ;
-  @name         { Name . head }
+  @skip         ;
+  @name         { Name }
   "\" | "λ"     { const Lam }
-  "."           { const Dot }
+  ","           { const Comma }
   "("           { const LParen }
   ")"           { const RParen }
-  "--" [^\n\r]* ;
+  "="           { const Equal }
+  $nl+          { const Newline }
+  "--" [^$nl]*  ;
 
 {
 data Token
   = Name E.Name
   | Lam
-  | Dot
+  | Comma
   | LParen
   | RParen
+  | Equal
+  | Newline
 
 pretty :: Token -> String
-pretty (Name x) = [x]
+pretty (Name x) = x
 pretty Lam = "λ"
-pretty Dot = "."
+pretty Comma = ","
 pretty LParen = "("
 pretty RParen = ")"
+pretty Equal = "="
+pretty Newline = "end of line"
 
-tokenizeError :: AlexInput -> Except String [Token]
-tokenizeError (_, _, str) = throwError ("unexpected '" ++ [head str] ++ "'")
+tokenizeError :: AlexInput -> M [Token]
+tokenizeError (_, _, str) = failure $ "unexpected '" ++ [head str] ++ "'"
 
-tokenize :: String -> Except String [Token]
+tokenize :: String -> M [Token]
 tokenize str = go ('\n', [], str)
   where
-  go :: AlexInput -> Except String [Token]
+  go :: AlexInput -> M [Token]
   go input@(_, _, str) =
     case alexScan input 0 of
       AlexEOF -> return []

@@ -1,6 +1,6 @@
 ### Overview
 
-There is an implementation of untyped lambda calculus in this repository. Variable names are one character long. Only lowercase letters are allowed.
+There is an implementation of untyped lambda calculus in this repository.
 
 Adding inductive types to a type theory is a difficult task. It can involve adding multiple systems to the language: positivity checker, termination checker, algebraic data types, pattern matching, etc.
 
