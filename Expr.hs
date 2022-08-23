@@ -1,35 +1,39 @@
-module Expr where
+module Expr (Name, Expr(..), pretty) where
 
 import Data.List
 
 type Name = Char
 
 data Expr
-  = App Expr Expr
-  | Bound Int
-  | Free Name
+  = Var Int
+  | Const Name
   | Lam Expr
+  | App Expr Expr
+  deriving Show
 
 free :: Expr -> [Name]
-free (App f a) = free f ++ free a
-free (Bound _) = []
-free (Free x) = [x]
+free (Var _) = []
+free (Const x) = [x]
 free (Lam b) = free b
+free (App f a) = free f ++ free a
 
-instance Show Expr where
-  show expr = go 0 expr
-    where
-    go n (App f a) = parens n f ++ parens' n a
-    go n (Bound i) = [names !! (n - i - 1)]
-    go _ (Free x) = [x]
-    go n (Lam b) = "\\" ++ [names !! n] ++ "." ++ go (n + 1) b
+pretty :: Expr -> String
+pretty e = expr 0 e
+  where
+  expr :: Int -> Expr -> String
+  expr k (Lam b) = "λ" ++ [names !! k] ++ "." ++ expr (k + 1) b
+  expr k e = application k e
 
-    parens n (Lam b) = "(" ++ go n (Lam b) ++ ")"
-    parens n x = go n x
+  application :: Int -> Expr -> String
+  application k (App f a) = application k f ++ simple k a
+  application k e = simple k e
 
-    parens' n (Bound i) = go n (Bound i)
-    parens' n (Free x) = go n (Free x)
-    parens' n x = "(" ++ go n x ++ ")"
+  simple :: Int -> Expr -> String
+  simple k (Var x) = [names !! (k - x - 1)]
+  simple _ (Const x) = [x]
+  simple k e = "(" ++ expr k e ++ ")"
 
-    -- This explodes if indexed beyond 25 or less.
-    names = ['a'..'z'] \\ free expr
+  -- This explodes if indexed beyond 25 (or less, depending on the number of
+  -- free variables).
+  names :: [Name]
+  names = ['a'..'z'] \\ free e

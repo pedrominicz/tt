@@ -1,5 +1,24 @@
-#!/bin/sh
+#!/usr/bin/bash
 
-runhaskell Test.hs || exit
-runhaskell Main.hs <input.txt 2>/dev/null |cmp output.txt || exit
-ghci -Wall Main.hs
+set -e
+
+trap clean 0 1 2 3 6
+
+clean() {
+  rm -f {Lex,Parse}.hs *.{hi,o} test tt
+}
+
+alex Lex.x
+happy Parse.y
+
+ghc Main.hs -o tt
+ghc -main-is Test.main Test.hs -o test
+
+./test
+./tt <input.txt |cmp output.txt
+
+case "$1" in
+  Main.hs) rlwrap ./tt;;
+  *.hs)    ghci "$1";;
+  *)       echo "cannot run '$1'";;
+esac
