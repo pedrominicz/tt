@@ -1,64 +1,45 @@
-> ?
-> λa.a
-> ?
-> λa.λb.a
-> ?
-> λa.λb.λc.ac(bc)
-> ?
-> λa.a
-> ?
-> ?
-> λa.λb.λc.b(ac)c
-> ?
-> λa.λb.a
-> ?
-> λa.λb.b
-> ?
-> λa.λb.b
-> ?
-> λa.λb.ab
-> ?
-> λa.λb.a(ab)
-> ?
-> λa.λb.λc.ab(bc)
+> > λa.a
+> > λa.λb.a
+> > λa.λb.λc.ac(bc)
+> > λa.a
+> > > λa.λb.λc.b(ac)c
+> > λa.λb.a
+> > λa.λb.b
+> > λa.λb.b
+> > λa.λb.ab
+> > λa.λb.a(ab)
+> > λa.λb.λc.ab(bc)
 > λa.λb.ab
 > λa.λb.a(ab)
 > λa.λb.a(a(ab))
-> ?
-> λa.a(λb.λc.λd.d)(λb.λc.b)
+> > λa.a(λb.λc.λd.d)(λb.λc.b)
 > λa.λb.a
 > λa.λb.b
 > λa.λb.b
 > λa.λb.b
-> ?
-> λa.λb.λc.a(λd.λe.e(db))(λd.c)(λd.d)
+> > λa.λb.λc.a(λd.λe.e(db))(λd.c)(λd.d)
 > λa.λb.b
 > λa.λb.b
 > λa.λb.ab
 > λa.λb.a(a(a(a(ab))))
-> ?
-> λa.λb.λc.λd.ac(bcd)
+> > λa.λb.λc.λd.ac(bcd)
 > λa.λb.b
 > λa.λb.a(ab)
 > λa.λb.a(ab)
 > λa.λb.a(a(a(a(a(ab)))))
-> ?
-> λa.λb.λc.λd.a(bc)d
+> > λa.λb.λc.λd.a(bc)d
 > λa.λb.ab
 > λa.λb.a(a(a(ab)))
 > λa.λb.a(a(a(a(a(ab)))))
 > λa.λb.b
 > λa.λb.b
-> ?
-> λa.λb.ba
+> > λa.λb.ba
 > λa.a
 > λa.λb.ab
 > λa.λb.b
 > λa.a
 > λa.λb.a(a(a(a(a(a(a(a(a(a(a(a(a(a(a(ab)))))))))))))))
-> ?
-> ?
-> λa.λb.a(λc.λd.d(c(λe.λf.de(ef))))(λc.b)(λc.c)
+> > > λa.λb.a(λc.λd.d(c(λe.λf.de(ef))))(λc.b)(λc.c)
 > λa.a
 > λa.λb.a(ab)
 > λa.λb.a(a(a(a(a(ab)))))

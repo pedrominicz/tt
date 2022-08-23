@@ -20,5 +20,5 @@ ghc -main-is Test.main Test.hs -o test
 case "$1" in
   Main.hs) rlwrap ./tt;;
   *.hs)    ghci "$1";;
-  *)       echo "cannot run '$1'";;
+  *)       rlwrap ./tt;;
 esac

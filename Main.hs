@@ -4,6 +4,7 @@ import Expr
 import Eval
 import Parse
 
+import Control.Monad.Except
 import System.Exit
 import System.IO
 
@@ -19,7 +20,8 @@ prompt = do
 main :: IO ()
 main = do
   e <- parse <$> prompt
-  case e of
-    Just e -> putStrLn $ pretty (eval e)
-    Nothing -> putStrLn "?"
+  case runExcept e of
+    Left e -> hPutStrLn stderr e
+    Right (Just e) -> putStrLn $ pretty (eval e)
+    Right Nothing -> return ()
   main

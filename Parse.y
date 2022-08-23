@@ -4,6 +4,7 @@ module Parse (parse) where
 import qualified Expr as E
 import qualified Lex as L
 
+import Control.Monad.Except
 import Data.List
 }
 
@@ -11,10 +12,10 @@ import Data.List
 
 %tokentype { L.Token }
 
-%monad { Maybe }
-%error { const Nothing }
+%monad { Except String }
+%error { parseError }
 
-%name parseExpr expr
+%name parseLine line
 
 %token
   name          { L.Name $$ }
@@ -23,6 +24,10 @@ import Data.List
   '('           { L.LParen }
   ')'           { L.RParen }
 %%
+
+line :: { Maybe Expr }
+  : expr                        { Just $1 }
+  | {- empty -}                 { Nothing }
 
 expr :: { Expr }
   : 'λ' names1 '.' expr         { foldr Lam $4 $2 }
@@ -57,6 +62,10 @@ nameless = go []
   go ctx (Lam x b) = E.Lam (go (x : ctx) b)
   go ctx (App f a) = E.App (go ctx f) (go ctx a)
 
-parse :: String -> Maybe E.Expr
-parse str = nameless <$> (L.tokenize str >>= parseExpr)
+parseError :: [L.Token] -> Except String a
+parseError [] = throwError "unexpected end of file"
+parseError (tk : _) = throwError ("unexpected '" ++ L.pretty tk ++ "'")
+
+parse :: String -> Except String (Maybe E.Expr)
+parse str = fmap fmap fmap nameless (L.tokenize str >>= parseLine)
 }
