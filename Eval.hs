@@ -20,7 +20,7 @@ subst x = go 0
       EQ -> shift i x
       GT -> Bound i'
   go i (Lam b) = Lam (go (i + 1) b)
-  go i x = x
+  go _ x = x
 
 shift :: Int -> Expr -> Expr
 shift n = go 0
@@ -28,4 +28,4 @@ shift n = go 0
   go i (App f a) = App (go i f) (go i a)
   go i (Bound i') | i <= i' = Bound (i' + n)
   go i (Lam b) = Lam (go (i + 1) b)
-  go i x = x
+  go _ x = x
