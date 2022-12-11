@@ -2,6 +2,8 @@
 
 There is an implementation of untyped lambda calculus in this repository.
 
+### Inductive Types
+
 Adding inductive types to a type theory is a difficult task. It can involve adding multiple systems to the language: positivity checker, termination checker, algebraic data types, pattern matching, etc.
 
 I've been exploring a hopefully simpler approach: induction for lambda-encoded data types. I'll leave a little roadmap of material to study here.
